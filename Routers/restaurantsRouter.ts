@@ -1,11 +1,11 @@
-const restaurantsRouter = require('express').Router();
-const {restaurantsController} = require('../Controllers/restaurantsController');
+const restaurantsRouter = require("express").Router();
+import restaurantsController from '../Controllers/restaurantsController';
 
-// authRouter.post('/signup' , authController.signUp);
-restaurantsRouter.get('/' , restaurantsController.getAllRestaurants);
-restaurantsRouter.get('/:id' , restaurantsController.getRestaurant);
-restaurantsRouter.post('/add-restaurant' ,restaurantsController.addRestaurant );
-restaurantsRouter.put('/update-restaurant' ,restaurantsController.updateRestaurant );
-restaurantsRouter.delete('/delete-restaurant' ,restaurantsController.deleteRestaurant );
+restaurantsRouter.get("/", restaurantsController.getAllRestaurants);
+restaurantsRouter.get("/:id", restaurantsController.getRestaurant);
+restaurantsRouter.post("/", restaurantsController.addRestaurant);
+restaurantsRouter.put("/:id", restaurantsController.updateRestaurant);
+restaurantsRouter.delete("/:id", restaurantsController.deleteRestaurant);
+restaurantsRouter.get("/filter-chef/:chefId", restaurantsController.getRestaurantsByChef);
 
 export default restaurantsRouter;

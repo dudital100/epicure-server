@@ -1,95 +1,77 @@
 import { Request, Response } from "express";
-const Restaurants = require("../Schemes/restaurantsScheme");
-const mongoose = require("mongoose");
+import restaurantHandler from "../Handlers/restaurantHandler";
+import dishHandler from "../Handlers/dishHandler";
 
-exports.restaurantsController = {
+const restaurantsController = {
   async getAllRestaurants(req: Request, res: Response) {
-    const allRests = await Restaurants.find();
-    // console.log(allRests);
-    if (allRests.length) res.send(allRests);
-    else res.send("No restaurants found!");
+    try {
+      const fetchAllresponse = await restaurantHandler.fetchAllRestaurants();
+      res.send(fetchAllresponse);
+    } catch (error) {
+      res.send(error);
+    }
   },
   async getRestaurant(req: Request, res: Response) {
-    const restId = req.params.id;
     try {
-      const currentRest = await Restaurants.findOne({ _id: restId });
-      res.send(currentRest);
-    } catch (error: any) {
-      res.send({
-        error: error.message,
-        message: "id was not found!",
-      });
+      const fetchDishResponse = await restaurantHandler.fetchRestaurant(
+        req.params.id
+      );
+      res.send(fetchDishResponse);
+    } catch (error) {
+      res.send(error);
+    }
+  },
+  async addRestaurant(req: Request, res: Response) {
+    try {
+      const newRestResponse = await restaurantHandler.addNewRestaurant(
+        req.body
+      );
+      res.send(newRestResponse);
+    } catch (error) {
+      res.send(error);
     }
   },
   async deleteRestaurant(req: Request, res: Response) {
-    const restId = req.body.restId;
-    if (!restId) {
-      res.send("Wrong Body parameter provided!");
-    }
-    let deleteResponse;
     try {
-      deleteResponse = await Restaurants.deleteOne({ _id: restId });
-    } catch (error: any) {
-      res.send(error.message);
+      const deleteResponse = await restaurantHandler.deleteRestaurant(
+        req.params.id
+      );
+      const dishesDeleteResponse = await dishHandler.deleteManyById(
+        req.params.id
+      );
+      const responseObject = {
+        restDelete: deleteResponse,
+        dishesDelete: dishesDeleteResponse,
+      };
+      res.send(responseObject);
+    } catch (error) {
+      res.send(error);
     }
-    const isDeleted: number = deleteResponse.deletedCount;
-    if (isDeleted) {
-      res.send("Deleted Successfully");
-    } else res.send("Restaurant was now found!");
-  },
-  async addRestaurant(req: Request, res: Response) {
-    const { name, img, chef, isOpen, isPopular, isNewRest, signatureDish } =
-      req.body;
-    const rest = new Restaurants({
-      name: name,
-      img: img,
-      chef: chef,
-      isOpen: isOpen,
-      isPopular: isPopular,
-      isNewRest: isNewRest,
-      signatureDish: signatureDish,
-    });
-    let restToSave;
-    try {
-      restToSave = await rest.save();
-    } catch (error: any) {
-      // console.log(error);
-      res.send(error.message);
-    }
-    if (restToSave) res.send(restToSave.name + " saved!");
   },
   async updateRestaurant(req: Request, res: Response) {
-    const {
-      _id,
-      name,
-      img,
-      chef,
-      isOpen,
-      isPopular,
-      isNewRest,
-      signatureDish,
-    } = req.body;
-    const updatedRest = new Restaurants({
-      _id : _id,
-      name: name,
-      img: img,
-      chef: chef,
-      isOpen: isOpen,
-      isPopular: isPopular,
-      isNewRest: isNewRest,
-      signatureDish: signatureDish,
-    });
     try {
-      const updateResponse = await Restaurants.findOneAndUpdate(
-        { _id: _id },
-        updatedRest,
-        { new: true }
+      const updateResponse = await restaurantHandler.updateRestaurant(
+        req.params.id,
+        req.body
       );
-      console.log(updateResponse);
-      res.send("Updated Successfully");
+      res.send(updateResponse);
     } catch (error) {
-      console.log(error);
-      res.send("Update was not successful");
+      res.send(error);
+    }
+  },
+  async getRestaurantsByChef(req: Request, res: Response) {
+    try {
+      const restByChefResponse = await restaurantHandler.fetchRestaurantsByChef(
+        req.params.chefId
+      );
+      res.send(restByChefResponse);
+    } catch (error) {
+      res.send(error);
     }
   },
 };
+
+export default restaurantsController;
+
+// create search, should return 3 arrays
+// each one is reponse relate to: dish,rest,chef-

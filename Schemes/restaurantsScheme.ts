@@ -1,28 +1,30 @@
-import { Schema, model } from 'mongoose';
-const mongoose = require('mongoose');
+import { Schema, model } from "mongoose";
 
 // 1. Create an interface representing a document in MongoDB.
 interface IRestaurants {
-//   id: number;
   name: string;
   img?: string;
-  chef: string;             // will be chef scheme later on
+  chef: { type: Schema.Types.ObjectId; ref: "Chef" };
   isOpen: boolean;
   isPopular: boolean;
   isNewRest: boolean;
-  signatureDish: number;
+  signatureDish: { type: Schema.Types.ObjectId; ref: "Restaurants" };
 }
 
 // 2. Create a Schema corresponding to the document interface.
-const restaurantsSchema = new Schema<IRestaurants>({
-  name: { type: String },
-  img: { type: String },
-  chef: { type: String },
-  isOpen: { type: Boolean },
-  isPopular: { type: Boolean },
-  isNewRest: { type: Boolean },
-  signatureDish:{ type: Number },
-}, { collection: 'restaurants'});
+const restaurantsSchema = new Schema<IRestaurants>(
+  {
+    name: { type: String },
+    img: { type: String },
+    chef: { type: Schema.Types.ObjectId, ref: "Chef" },
+    isOpen: { type: Boolean },
+    isPopular: { type: Boolean },
+    isNewRest: { type: Boolean },
+    signatureDish: { type: Schema.Types.ObjectId, ref: "Dishes" },
+  },
+  { collection: "restaurants" }
+);
 
 // 3. Create a Model and export it
-module.exports = model<IRestaurants>('Restaurants', restaurantsSchema);
+const Restaurants = model<IRestaurants>("Restaurants", restaurantsSchema);
+export default Restaurants;
