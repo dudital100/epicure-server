@@ -5,24 +5,29 @@ const ObjectId = mongoose.Types.ObjectId;
 const restaurantHandler = {
   // returns array of restaurants (empty array if there are no restaurants at all);
   async fetchAllRestaurants() {
-    return Restaurants.aggregate([
-      {
-        $lookup: {
-          from: "dishes",
-          localField: "signatureDish",
-          foreignField: "_id",
-          as: "signatureDish",
-        },
-      },
-      { $unwind: "$signatureDish" },
-    ]);
-    // return await Restaurants.find()
-    //   .populate({ path: "signatureDish", select: "-restaurantRef" })
-    //   .populate({ path: "chef", select: "name -_id" });
+    // return Restaurants.aggregate([
+    //   {
+    //     $lookup: {
+    //       from: "dishes",
+    //       localField: "signatureDish",
+    //       foreignField: "_id",
+    //       as: "signatureDish",
+    //     },
+    //   },
+    //   { $unwind: "$signatureDish" },
+    // ]);
+    return await Restaurants.find()
+      .populate({ path: "signatureDish", select: "-restaurantRef" })
+      .populate({ path: "chef", select: "name -_id" });
   },
   // returns restaurant document if success (null if not found)
   async fetchRestaurant(restId: string) {
     return await Restaurants.findOne({ _id: restId })
+      .populate({ path: "signatureDish", select: "-restaurantRef" })
+      .populate({ path: "chef", select: "name -_id" });
+  },
+  async fetchFilteredRestaurants(filter: object) {
+    return await Restaurants.find(filter)
       .populate({ path: "signatureDish", select: "-restaurantRef" })
       .populate({ path: "chef", select: "name -_id" });
   },
