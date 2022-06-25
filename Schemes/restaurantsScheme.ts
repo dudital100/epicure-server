@@ -8,6 +8,7 @@ interface IRestaurants {
   isOpen: boolean;
   isPopular: boolean;
   isNewRest: boolean;
+  isValid: boolean
   signatureDish: { type: Schema.Types.ObjectId; ref: "Restaurants" };
 }
 
@@ -20,6 +21,7 @@ const restaurantsSchema = new Schema<IRestaurants>(
     isOpen: { type: Boolean },
     isPopular: { type: Boolean },
     isNewRest: { type: Boolean },
+    isValid: { type: Boolean},
     signatureDish: { type: Schema.Types.ObjectId, ref: "Dishes" },
   },
   { collection: "restaurants" }

@@ -13,10 +13,20 @@ const restaurantsController = {
   },
   async getRestaurant(req: Request, res: Response) {
     try {
-      const fetchDishResponse = await restaurantHandler.fetchRestaurant(
+      const fetchRestResponse = await restaurantHandler.fetchRestaurant(
         req.params.id
       );
-      res.send(fetchDishResponse);
+      res.send(fetchRestResponse);
+    } catch (error) {
+      res.send(error);
+    }
+  },
+  async getFilteredRestaurants(req: Request, res: Response) {
+    try {
+      const fetchFilteredResponse = await restaurantHandler.fetchFilteredRestaurants(
+        req.body.filter
+      );
+      res.send(fetchFilteredResponse);
     } catch (error) {
       res.send(error);
     }
@@ -32,6 +42,7 @@ const restaurantsController = {
     }
   },
   async deleteRestaurant(req: Request, res: Response) {
+    console.log(req.params.id)
     try {
       const deleteResponse = await restaurantHandler.deleteRestaurant(
         req.params.id

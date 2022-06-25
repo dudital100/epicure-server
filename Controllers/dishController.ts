@@ -29,6 +29,8 @@ const DishesController = {
     }
   },
   async addDish(req: Request, res: Response) {
+    console.log(req.body);
+    
     try {
       const newDishResponse = await dishHandler.addNewDish(req.body);
       res.send(newDishResponse);

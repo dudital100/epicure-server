@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import chefHandler from "../Handlers/chefHandler";
+// import dishHandler from "../Handlers/dishHandler";
+// import restaurantHandler from "../Handlers/restaurantHandler";
 
 const chefController = {
   async getAllChefs(req: Request, res: Response) {
@@ -30,23 +32,27 @@ const chefController = {
   },
   async addChef(req: Request, res: Response) {
     try {
-      const newChefResponse = await chefHandler.addNewChef(req.body.name);
+      const newChefResponse = await chefHandler.addNewChef(req.body);
       res.send(newChefResponse);
     } catch (error) {
       res.send(error);
     }
   },
+  ///////
   async deleteChef(req: Request, res: Response) {
     try {
-      const deleteResponse = await chefHandler.deleteChef(req.params.id);
-      res.send(deleteResponse);
+      const deleteChefResponse = await chefHandler.deleteChef(req.params.id);
+      res.send(deleteChefResponse);
     } catch (error) {
       res.send(error);
     }
   },
   async updateChef(req: Request, res: Response) {
     try {
-      const updateResponse = await chefHandler.updateChef(req.params.id,req.body);
+      const updateResponse = await chefHandler.updateChef(
+        req.params.id,
+        req.body
+      );
       res.send(updateResponse);
     } catch (error) {
       res.send(error);
