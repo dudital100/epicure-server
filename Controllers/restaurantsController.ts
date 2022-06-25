@@ -42,6 +42,7 @@ const restaurantsController = {
     }
   },
   async deleteRestaurant(req: Request, res: Response) {
+    console.log(req.params.id)
     try {
       const deleteResponse = await restaurantHandler.deleteRestaurant(
         req.params.id

@@ -16,35 +16,47 @@ const restaurantHandler = {
     //   },
     //   { $unwind: "$signatureDish" },
     // ]);
-    return await Restaurants.find()
-      .populate({ path: "signatureDish", select: "-restaurantRef" })
-      .populate({ path: "chef", select: "name -_id" });
-  },
+    return await Restaurants.find({isValid: true})
+      .populate({ path: "signatureDish", select: "-__v" })
+      .populate({ path: "chef", select: "-__v" });
+    },
   // returns restaurant document if success (null if not found)
   async fetchRestaurant(restId: string) {
-    return await Restaurants.findOne({ _id: restId })
-      .populate({ path: "signatureDish", select: "-restaurantRef" })
-      .populate({ path: "chef", select: "name -_id" });
+    return await Restaurants.findOne({ _id: restId , isValid: true})
+    .populate({ path: "signatureDish", select: "-__v" })
+    .populate({ path: "chef", select: "-__v" });
   },
   async fetchFilteredRestaurants(filter: object) {
+    const fil = {
+      ...filter, 
+      isValid: true
+    }
     return await Restaurants.find(filter)
-      .populate({ path: "signatureDish", select: "-restaurantRef" })
-      .populate({ path: "chef", select: "name -_id" });
+    .populate({ path: "signatureDish", select: "-__v" })
+    .populate({ path: "chef", select: "-__v" });
   },
   // returns restaurants by some filter (will be provided by post request with body)
   async fetchRestaurantsByFilter(filter: object) {
+    const fil = {
+      ...filter,
+      isValid: true
+    }
     return await Restaurants.find(filter)
-      .populate({ path: "signatureDish", select: "-restaurantRef" })
-      .populate({ path: "chef", select: "name -_id" });
+    .populate({ path: "signatureDish", select: "-__v" })
+    .populate({ path: "chef", select: "-__v" });
   },
   // returns the new Restaurant
   async addNewRestaurant(newRestaurantObject: object) {
-    const newRestaurant = new Restaurants(newRestaurantObject);
+    const newRest = {
+      ...newRestaurantObject, 
+      isValid: true
+    }
+    const newRestaurant = new Restaurants(newRest);
     return await newRestaurant.save();
   },
   // deleteResponse has 2 fields: "acknowledged": bool, "deletedCount": number(amount of documents deleted)
   async deleteRestaurant(restId: string) {
-    return await Restaurants.deleteOne({ _id: restId });
+    return await Restaurants.findOneAndUpdate({ _id: restId } , { isValid: false});
   },
   // returns updated restaurant document (null if not successful)
   async updateRestaurant(restId: string, updatedResthObject: object) {
@@ -66,7 +78,7 @@ const restaurantHandler = {
         $match: { chef: chefObjId },
       },
     ]);
-  },
+  }
 };
 
 export default restaurantHandler;

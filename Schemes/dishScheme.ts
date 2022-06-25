@@ -9,6 +9,7 @@ interface IDishes {
   isSpicy: boolean;
   isVegan: boolean;
   isVegi: boolean;
+  isValid: boolean;
   restaurantRef: { type: Schema.Types.ObjectId; ref: "Restaurants" };
 }
 
@@ -22,6 +23,7 @@ const dishesSchema = new Schema<IDishes>(
     isSpicy: { type: Boolean },
     isVegan: { type: Boolean },
     isVegi: { type: Boolean },
+    isValid: { type: Boolean},
     restaurantRef: { type: Schema.Types.ObjectId, ref: "Restaurants" },
   },
   { collection: "dishes" }
