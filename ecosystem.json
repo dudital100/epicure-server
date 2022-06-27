@@ -1,0 +1,22 @@
+{
+	"apps": [
+		{
+			"name": "epicure-server",
+			"script": "./dist/src/index.js"
+		}
+	],
+
+
+	"deploy": {
+		"develop": {
+			"host": ["epicure-vm"],
+			"ref": "origin/develop",
+			"repo": "https://github.com/dudital100/epicure-server",
+			"path": "/home/ubuntu/epicure-server",
+			"ssh_options": "StrictHostKeyChecking=no",
+			"post-deploy": "mkdir -p logs && npm i && npm run build && pm2 reload ecosystem.json",
+			"pre-deploy-local": "echo 'Deploying code to servers'"
+		}
+	}
+}
+
