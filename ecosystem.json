@@ -9,7 +9,7 @@
 
 	"deploy": {
 		"develop": {
-			"host": ["http://ec2-54-197-181-245.compute-1.amazonaws.com/"],
+			"host": ["ec2-54-197-181-245.compute-1.amazonaws.com/"],
             "key": "~/Downloads/epicure-key.pem",
             "user": "ubuntu",
 			"ref": "origin/develop",
@@ -21,4 +21,6 @@
 		}
 	}
 }
+
+
 
