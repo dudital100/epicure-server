@@ -14,7 +14,7 @@
 			"repo": "https://github.com/dudital100/epicure-server",
 			"path": "/home/ubuntu/epicure-server",
 			"ssh_options": "StrictHostKeyChecking=no",
-			"post-deploy": "mkdir -p logs && npm install && npm run build && pm2 reload ecosystem.json",
+			"post-deploy": "mkdir -p logs && npm install && npm run build && pm2 start /home/ubuntu/epicure-server/source/dist/src/index.js --name epicure-server",
 			"pre-deploy-local": "echo 'Deploying code to servers'"
 		}
 	}
