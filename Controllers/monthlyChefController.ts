@@ -20,7 +20,7 @@ const monthlyChefController = {
       res.send(error);
     }
   },
-    async updateChefOfTheMonth(req: Request, res: Response) {
+    async updateChefOfTheMonth(req: Request, res: Response) {      
         try {
             const updateChefResponse = await monthlyChefHandler.updateChefOfTheMonth(
               req.body.chefOfTheMonthRef

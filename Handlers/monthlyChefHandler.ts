@@ -13,7 +13,7 @@ const chefHandler = {
   async updateChefOfTheMonth(chefOfTheMonthRef: object) {
     return await MonthlyChef.findOneAndUpdate({
       chefOfTheMonthRef: chefOfTheMonthRef,
-    });
+    }).populate({ path: "chefOfTheMonthRef" });
   },
 };
 

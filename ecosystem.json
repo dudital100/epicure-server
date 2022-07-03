@@ -9,7 +9,7 @@
 
 	"deploy": {
 		"develop": {
-			"host": ["epicure-vm"],
+			"host": ["epicure"],
 			"ref": "origin/develop",
 			"repo": "https://github.com/dudital100/epicure-server",
 			"path": "/home/ubuntu/epicure-server",
