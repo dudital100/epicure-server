@@ -33,11 +33,19 @@ const chefHandler = {
     const isChefOfTheMonth = await MonthlyChef.findOne({
       chefOfTheMonthRef: chefId,
     });
+    let isValidRest = false;
     const isRestaurantsRef = await Restaurants.find({ chef: chefId });
+    for(let restRef of isRestaurantsRef) {
+      if (restRef.isValid) {
+        isValidRest = true;
+        break;
+      }
+    }
     if (isChefOfTheMonth) {
       return { message: "Can't delete chef of the month!" };
     }
-    if (isRestaurantsRef.length) {
+
+    if (isValidRest) {
       return { message: "Can't delete chef with restaurants!" };
     } else return await Chef.findByIdAndUpdate({ _id: chefId } , {isValid: false});
   },
